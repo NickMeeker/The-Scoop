@@ -1,0 +1,17 @@
+nickmeeker:
+  username: nickmeeker
+  articleIds:
+    - 1
+  commentIds:
+    - 3
+helloworld:
+  username: helloworld
+  articleIds: []
+  commentIds:
+    - 1
+bobandalice:
+  username: bobandalice
+  articleIds:
+    - 2
+  commentIds:
+    - 2

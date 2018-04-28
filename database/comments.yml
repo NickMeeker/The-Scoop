@@ -1,0 +1,25 @@
+'1':
+  id: 1
+  username: helloworld
+  body: Cool!
+  articleId: 1
+  upvotedBy:
+    - helloworld
+    - nickmeeker
+  downvotedBy: []
+'2':
+  id: 2
+  username: bobandalice
+  body: I love codeacademy!
+  articleId: 1
+  upvotedBy:
+    - bobandalice
+  downvotedBy: []
+'3':
+  id: 3
+  username: nickmeeker
+  body: 'I''ll use this for my project, thanks'
+  articleId: 2
+  upvotedBy:
+    - nickmeeker
+  downvotedBy: []
