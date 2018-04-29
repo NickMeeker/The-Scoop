@@ -410,32 +410,48 @@ function downvoteComment(url, request) {
  */
 function saveDatabase(){
   yaml = require('node-yaml');
-  filepath = "./database/users.yml";
+  filepath = "./database/database.yml";
 
   try {
-    // pull all current info from the db
-    users = database.users;
-    articles = database.articles;
-    comments = database.comments;
-
-    // write the user information to the users.yml file
-    yaml.writeSync(filepath, users, "utf8", function(err){
+    // write all current info to the db
+    yaml.writeSync(filepath, database, "utf8", function(err){
       if(err) throw err;
     });
 
-    // write the articles information to the articles.yml file
-    filepath = "./database/articles.yml";
-    yaml.writeSync(filepath, articles, "utf8", function(err){
-      if(err) throw err;
-    });
-
-    // write the comments information to the comments.yml file
-    filepath = "./database/comments.yml";
-    yaml.writeSync(filepath, comments, "utf8", function(err){
-      if(err) throw err;
-    });
+    /*
+     * ALTERNATE IMPLEMENTATION:
+     *  The following is an alternate implementation for serializing data.
+     *  Instead of logging everything to the database.yml file, it writes to
+     *  three separate files: articles.yml, users.yml, and comments.yml.
+     *  Using this implementation, the serialized data is segregated according
+     *  to object type. As new objects are created, new yml files can be created
+     *  and written to using the following implementation. This method has the
+     *  advantage of keeping like data separated, increasing readability and
+     *  maintainability as storage requirements get larger and more varied.
+     */
+    //  users = database.users;
+    //  articles = database.articles;
+    //  comments = database.comments;
+    //  filepath = "./database/users.yml";
+    // // write the user information to the users.yml file
+    // yaml.writeSync(filepath, users, "utf8", function(err){
+    //   if(err) throw err;
+    // });
+    //
+    // // write the articles information to the articles.yml file
+    // // filepath = "./database/articles.yml";
+    // yaml.writeSync(filepath, articles, "utf8", function(err){
+    //   if(err) throw err;
+    // });
+    //
+    // // write the comments information to the comments.yml file
+    // // filepath = "./database/comments.yml";
+    // yaml.writeSync(filepath, comments, "utf8", function(err){
+    //   if(err) throw err;
+    // });
 
   } catch (e) {
+    console.log("Error writing file");
     console.log(e);
   }
 }
@@ -451,7 +467,7 @@ function saveDatabase(){
 function loadDatabase(){
   yaml = require('js-yaml');
   fs   = require('fs');
-  filepath = "./database/users.yml";
+  filepath = "./database/database.yml";
 
   try{
     // Deal with users first
@@ -459,42 +475,56 @@ function loadDatabase(){
     var data = yaml.safeLoad(fs.readFileSync(filepath, 'utf8'));
     // iterate over the object according to its keys.
     // in this case, keys will represent individual users
-    if(data){
-      Object.keys(data).forEach(function(key) {
-        // pull the current "value" from the yml data.
-        // it will represent a user
-        var val = data[key];
-        const user = val;
-        // add the user to the db
-        database.users[user.username] = user;
-      });
-    }
+    return data;
 
-    // Articles are handled exactly the same way as users
-    filepath = "./database/articles.yml";
-    data = yaml.safeLoad(fs.readFileSync(filepath, 'utf8'));
-    if(data){
-      Object.keys(data).forEach(function(key) {
-        var val = data[key];
-        const article = val;
-        database.articles[article.id] = article;
-        // just make sure to increment nextArticleId for each article
-        database.nextArticleId++;
-      });
-    }
-
-    // comments are handled the same way as articles
-    filepath = "./database/comments.yml";
-    data = yaml.safeLoad(fs.readFileSync(filepath, 'utf8'));
-    if(data){
-      Object.keys(data).forEach(function(key) {
-        var val = data[key];
-        const comment = val;
-        database.comments[comment.id] = comment;
-        database.nextCommentId++;
-      });
-    }
+    /*
+     * ALTERNATE IMPLEMENTATION:
+     *  The following is an alternate implementation for serializing data.
+     *  Instead of logging everything to the database.yml file, it writes to
+     *  three separate files: articles.yml, users.yml, and comments.yml.
+     *  Using this implementation, the serialized data is segregated according
+     *  to object type. As new objects are created, new yml files can be created
+     *  and written to using the following implementation. This method has the
+     *  advantage of keeping like data separated, increasing readability and
+     *  maintainability as storage requirements get larger and more varied.
+     */
+    // if(data){
+    //   Object.keys(data).forEach(function(key) {
+    //     // pull the current "value" from the yml data.
+    //     // it will represent a user
+    //     var val = data[key];
+    //     const user = val;
+    //     // add the user to the db
+    //     database.users[user.username] = user;
+    //   });
+    // }
+    //
+    // // Articles are handled exactly the same way as users
+    // filepath = "./database/articles.yml";
+    // data = yaml.safeLoad(fs.readFileSync(filepath, 'utf8'));
+    // if(data){
+    //   Object.keys(data).forEach(function(key) {
+    //     var val = data[key];
+    //     const article = val;
+    //     database.articles[article.id] = article;
+    //     // just make sure to increment nextArticleId for each article
+    //     database.nextArticleId++;
+    //   });
+    // }
+    //
+    // // comments are handled the same way as articles
+    // filepath = "./database/comments.yml";
+    // data = yaml.safeLoad(fs.readFileSync(filepath, 'utf8'));
+    // if(data){
+    //   Object.keys(data).forEach(function(key) {
+    //     var val = data[key];
+    //     const comment = val;
+    //     database.comments[comment.id] = comment;
+    //     database.nextCommentId++;
+    //   });
+    // }
   } catch (e) {
+    console.log("Error reading file");
     console.log(e);
   }
 }
